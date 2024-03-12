@@ -1,6 +1,7 @@
 package com.example.tic_tac_toe_backend.service;
 
 import com.example.tic_tac_toe_backend.dto.RoomDTO;
+import com.example.tic_tac_toe_backend.dto.StartGameMessage;
 import com.example.tic_tac_toe_backend.entity.Room;
 import com.example.tic_tac_toe_backend.utils.exception.RoomNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class RoomService {
 
     private void sendStartGameMessageToPlayer(String playerName) {
         log.info("Sending starting game info to /topic/ + playerName");
-        simpMessagingTemplate.convertAndSend("/topic/" + playerName, "Game started");
+        simpMessagingTemplate.convertAndSend("/topic/" + playerName, new StartGameMessage("Game starting"));
     }
 
     private Optional<Room> getRoomWithOneFreeSlot() {
