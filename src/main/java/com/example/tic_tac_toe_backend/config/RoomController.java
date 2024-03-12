@@ -1,8 +1,7 @@
 package com.example.tic_tac_toe_backend.config;
 
 import com.example.tic_tac_toe_backend.dto.RoomDTO;
-import com.example.tic_tac_toe_backend.entity.Room;
-import com.example.tic_tac_toe_backend.service.BoardService;
+import com.example.tic_tac_toe_backend.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/rooms")
 @RequiredArgsConstructor
-public class BoardController {
+public class RoomController {
 
-    private final BoardService boardService;
+    private final RoomService boardService;
 
     @RequestMapping("/chooseRoomForPlayer")
     public ResponseEntity<RoomDTO> chooseRoomForPlayer(@RequestParam String playerName) {

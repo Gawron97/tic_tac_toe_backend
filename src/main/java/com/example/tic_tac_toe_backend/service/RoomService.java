@@ -1,19 +1,20 @@
 package com.example.tic_tac_toe_backend.service;
 
 import com.example.tic_tac_toe_backend.dto.RoomDTO;
-import com.example.tic_tac_toe_backend.entity.Board;
 import com.example.tic_tac_toe_backend.entity.Room;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BoardService {
+public class RoomService {
 
-    private final Board board;
+    private final List<Room> rooms;
 
-    public BoardService() {
-        this.board = new Board();
+    public RoomService() {
+        rooms = new ArrayList<>(List.of(new Room("room1")));
     }
 
     public RoomDTO chooseRoomForPlayer(String playerName) {
@@ -35,22 +36,22 @@ public class BoardService {
             return RoomDTO.of(room);
         }
 
-        Room newRoom = new Room("room" + (board.getRooms().size() + 1));
+        Room newRoom = new Room("room" + (rooms.size() + 1));
         newRoom.setPlayer1(playerName);
         newRoom.setFreeSlots(1);
-        board.getRooms().add(newRoom);
+        rooms.add(newRoom);
         return RoomDTO.of(newRoom);
 
     }
 
     private Optional<Room> getRoomWithOneFreeSlot() {
-        return board.getRooms().stream()
+        return rooms.stream()
                 .filter(room -> room.getFreeSlots() == 1)
                 .findFirst();
     }
 
     private Optional<Room> getRoomWithTwoFreeSlots() {
-        return board.getRooms().stream()
+        return rooms.stream()
                 .filter(room -> room.getFreeSlots() == 2)
                 .findFirst();
     }
