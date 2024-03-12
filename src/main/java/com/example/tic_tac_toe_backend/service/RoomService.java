@@ -3,6 +3,8 @@ package com.example.tic_tac_toe_backend.service;
 import com.example.tic_tac_toe_backend.dto.RoomDTO;
 import com.example.tic_tac_toe_backend.entity.Room;
 import com.example.tic_tac_toe_backend.utils.exception.RoomNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,12 +12,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class RoomService {
 
     private final List<Room> rooms;
     private int roomCounter = 1;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public RoomService() {
+    public RoomService(SimpMessagingTemplate simpMessagingTemplate) {
+        this.simpMessagingTemplate = simpMessagingTemplate;
         rooms = new ArrayList<>(List.of(new Room("room" + roomCounter++)));
     }
 
@@ -27,6 +32,7 @@ public class RoomService {
             room = optionalRoom.get();
             room.setPlayer2(playerName);
             room.setFreeSlots(0);
+            sendStartGameMessage(room);
             return RoomDTO.of(room);
         }
 
@@ -44,6 +50,16 @@ public class RoomService {
         rooms.add(newRoom);
         return RoomDTO.of(newRoom);
 
+    }
+
+    private void sendStartGameMessage(Room room) {
+        sendStartGameMessageToPlayer(room.getPlayer1());
+        sendStartGameMessageToPlayer(room.getPlayer2());
+    }
+
+    private void sendStartGameMessageToPlayer(String playerName) {
+        log.info("Sending starting game info to /topic/ + playerName");
+        simpMessagingTemplate.convertAndSend("/topic/" + playerName, "Game started");
     }
 
     private Optional<Room> getRoomWithOneFreeSlot() {
