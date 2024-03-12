@@ -19,8 +19,8 @@ public class RoomController {
     }
 
     @DeleteMapping("/deletePlayerFromRoom")
-    public ResponseEntity deletePlayerFromRoom(@RequestParam String roomName) {
-        boardService.deletePlayerFromRoom(roomName);
+    public ResponseEntity deletePlayerFromRoom(@RequestParam String roomName, @RequestParam String playerName) {
+        boardService.deletePlayerFromRoom(roomName, playerName);
         return ResponseEntity.ok().build();
     }
 

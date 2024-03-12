@@ -58,11 +58,24 @@ public class RoomService {
                 .findFirst();
     }
 
-    public void deletePlayerFromRoom(String roomName) {
+    public void deletePlayerFromRoom(String roomName, String playerName) {
         rooms.stream()
                 .filter(room -> room.getRoomName().equals(roomName))
                 .findFirst()
-                .ifPresentOrElse(rooms::remove, RoomNotFoundException::new);
+                .ifPresentOrElse(room -> {
+                    if(room.getFreeSlots() == 1) {
+                        rooms.remove(room);
+                    } else {
+                        if(room.getPlayer1().equals(playerName)) {
+                            room.setPlayer1(room.getPlayer2());
+                            room.setPlayer2(null);
+                            room.setFreeSlots(1);
+                        } else {
+                            room.setPlayer2(null);
+                            room.setFreeSlots(1);
+                        }
+                    }
+                }, RoomNotFoundException::new);
     }
 
 }
