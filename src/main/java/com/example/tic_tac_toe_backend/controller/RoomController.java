@@ -1,13 +1,10 @@
-package com.example.tic_tac_toe_backend.config;
+package com.example.tic_tac_toe_backend.controller;
 
 import com.example.tic_tac_toe_backend.dto.RoomDTO;
 import com.example.tic_tac_toe_backend.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rooms")
@@ -19,6 +16,12 @@ public class RoomController {
     @PostMapping("/chooseRoomForPlayer")
     public ResponseEntity<RoomDTO> chooseRoomForPlayer(@RequestParam String playerName) {
         return ResponseEntity.ok(boardService.chooseRoomForPlayer(playerName));
+    }
+
+    @DeleteMapping("/deletePlayerFromRoom")
+    public ResponseEntity deletePlayerFromRoom(@RequestParam String roomName) {
+        boardService.deletePlayerFromRoom(roomName);
+        return ResponseEntity.ok().build();
     }
 
 }

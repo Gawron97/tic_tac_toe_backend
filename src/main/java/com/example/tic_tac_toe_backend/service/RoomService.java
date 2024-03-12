@@ -2,6 +2,7 @@ package com.example.tic_tac_toe_backend.service;
 
 import com.example.tic_tac_toe_backend.dto.RoomDTO;
 import com.example.tic_tac_toe_backend.entity.Room;
+import com.example.tic_tac_toe_backend.utils.exception.RoomNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,9 +13,10 @@ import java.util.Optional;
 public class RoomService {
 
     private final List<Room> rooms;
+    private int roomCounter = 1;
 
     public RoomService() {
-        rooms = new ArrayList<>(List.of(new Room("room1")));
+        rooms = new ArrayList<>(List.of(new Room("room" + roomCounter++)));
     }
 
     public RoomDTO chooseRoomForPlayer(String playerName) {
@@ -36,7 +38,7 @@ public class RoomService {
             return RoomDTO.of(room);
         }
 
-        Room newRoom = new Room("room" + (rooms.size() + 1));
+        Room newRoom = new Room("room" + roomCounter++);
         newRoom.setPlayer1(playerName);
         newRoom.setFreeSlots(1);
         rooms.add(newRoom);
@@ -54,6 +56,13 @@ public class RoomService {
         return rooms.stream()
                 .filter(room -> room.getFreeSlots() == 2)
                 .findFirst();
+    }
+
+    public void deletePlayerFromRoom(String roomName) {
+        rooms.stream()
+                .filter(room -> room.getRoomName().equals(roomName))
+                .findFirst()
+                .ifPresentOrElse(rooms::remove, RoomNotFoundException::new);
     }
 
 }
