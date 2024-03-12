@@ -59,7 +59,7 @@ public class RoomService {
     }
 
     private void sendStartGameMessageToPlayer(String playerName) {
-        log.info("Sending starting game info to /topic/ + playerName");
+        log.info("Sending starting game info to /topic/" + playerName);
         simpMessagingTemplate.convertAndSend("/topic/" + playerName, new StartGameMessage("Game starting"));
     }
 
