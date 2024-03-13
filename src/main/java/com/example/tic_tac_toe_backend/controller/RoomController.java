@@ -13,6 +13,11 @@ public class RoomController {
 
     private final RoomService boardService;
 
+    @GetMapping
+    public ResponseEntity<RoomDTO> getRoom(@RequestParam String roomName) {
+        return ResponseEntity.ok(boardService.getRoom(roomName));
+    }
+
     @PostMapping("/chooseRoomForPlayer")
     public ResponseEntity<RoomDTO> chooseRoomForPlayer(@RequestParam String playerName) {
         return ResponseEntity.ok(boardService.chooseRoomForPlayer(playerName));

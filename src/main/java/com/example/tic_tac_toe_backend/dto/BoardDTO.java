@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
-public class StartGameMessage {
+public class BoardDTO {
 
-    private Boolean isStarting;
+    private List<List<Integer>> fields;
 
 }

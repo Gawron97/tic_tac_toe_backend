@@ -7,8 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class StartGameMessage {
+public class GameOverMessage {
 
-    private Boolean isStarting;
+    private boolean isWinner;
+    private boolean isDraw;
 
 }

@@ -1,5 +1,7 @@
 package com.example.tic_tac_toe_backend.controller;
 
+import com.example.tic_tac_toe_backend.dto.PlayerMove;
+import com.example.tic_tac_toe_backend.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -10,14 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class WebsocketController {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final GameService gameService;
 
     @MessageMapping("") // If we provide null path, it will use only prefix defines in WebSocketConfig -> config.setApplicationDestinationPrefixes("/app");
-    public void forwardMessage(String message) {
-        // Need to get user from Principal
-        simpMessagingTemplate.convertAndSendToUser("user", "/topic", message);
-        // Or I think we can do it this way
-        simpMessagingTemplate.convertAndSend("/topic/user", message);
+    public void forwardMessage(PlayerMove playerMove) {
+        gameService.makeMove(playerMove);
     }
 
 }
