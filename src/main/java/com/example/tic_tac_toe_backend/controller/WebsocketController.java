@@ -14,7 +14,7 @@ public class WebsocketController {
 
     private final GameService gameService;
 
-    @MessageMapping("") // If we provide null path, it will use only prefix defines in WebSocketConfig -> config.setApplicationDestinationPrefixes("/app");
+    @MessageMapping("/move") // If we provide null path, it will use only prefix defines in WebSocketConfig -> config.setApplicationDestinationPrefixes("/app");
     public void forwardMessage(PlayerMove playerMove) {
         gameService.makeMove(playerMove);
     }

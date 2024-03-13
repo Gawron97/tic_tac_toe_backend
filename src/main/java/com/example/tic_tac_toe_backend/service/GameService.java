@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,7 +49,19 @@ public class GameService {
         if(room.getPlayer2().equals(playerMove.getPlayerName())) {
             symbol = 2;
         }
+        if (fields == null) {
+            fields = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                List<Integer> row = new ArrayList<Integer>();
+                for (int j = 0; j < 3; j++) {
+                    row.add(null);
+                }
+                fields.add(row);
+            }
+        }
+
         fields.get(playerMove.getX()).set(playerMove.getY(), symbol);
+        room.setFields(fields);
     }
 
     private boolean checkWin(Room room) {
