@@ -24,12 +24,6 @@ public class GameService {
         Room room = roomRepository.getRoomByName(playerMove.getRoomName());
 
         makeMoveOnBoard(room, playerMove);
-        if(checkWin(room)) {
-            return;
-        }
-        if(checkDraw(room)){
-            return;
-        }
 
         BoardDTO board = new BoardDTO(room.getFields());
 
@@ -37,6 +31,13 @@ public class GameService {
             simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), board);
         } else {
             simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), board);
+        }
+
+        if(checkWin(room)) {
+            return;
+        }
+        if(checkDraw(room)){
+            return;
         }
 
     }
