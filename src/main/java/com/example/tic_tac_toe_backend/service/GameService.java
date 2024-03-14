@@ -35,13 +35,13 @@ public class GameService {
         }
 
         if(checkWin(room)) {
+            startNewGame(room);
             return;
         }
         if(checkDraw(room)){
+            startNewGame(room);
             return;
         }
-        startNewGame(room);
-
     }
 
     private void makeMoveOnBoard(Room room, PlayerMove playerMove) {
