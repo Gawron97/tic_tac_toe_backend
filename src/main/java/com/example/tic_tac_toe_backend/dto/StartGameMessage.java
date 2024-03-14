@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StartGameMessage {
 
+    private static String dtype = "StartGameMessage";
     private Boolean isStarting;
 
 }

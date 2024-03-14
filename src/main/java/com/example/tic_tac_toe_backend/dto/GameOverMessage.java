@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GameOverMessage {
 
+    private static String dtype = "GameOverMessage";
     private boolean isWinner;
     private boolean isDraw;
 

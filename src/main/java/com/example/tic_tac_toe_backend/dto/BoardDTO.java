@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BoardDTO {
 
+    private static String dtype = "Board";
     private List<List<Integer>> fields;
 
 }

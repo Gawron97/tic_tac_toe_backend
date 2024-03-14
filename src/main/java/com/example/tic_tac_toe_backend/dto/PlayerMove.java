@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class PlayerMove {
 
+    private static String dtype = "PlayerMove";
     private String roomName;
     private int x;
     private int y;
