@@ -34,6 +34,7 @@ public class RoomService {
             room = optionalRoom.get();
             room.setPlayer2(player);
             room.setFreeSlots(0);
+            chooseStartingPlayer(room);
             sendStartGameMessage(room);
             return RoomDTO.of(room);
         }
@@ -55,17 +56,20 @@ public class RoomService {
 
     }
 
-    private void sendStartGameMessage(Room room) {
+    private void chooseStartingPlayer(Room room) {
         boolean isStarting = new Random().nextBoolean();
         room.getPlayer1().setStarting(isStarting);
         room.getPlayer2().setStarting(!isStarting);
-        sendStartGameMessageToPlayer(room.getPlayer1().getName(), isStarting);
-        sendStartGameMessageToPlayer(room.getPlayer2().getName(), !isStarting);
     }
 
-    private void sendStartGameMessageToPlayer(String playerName, boolean isStarting) {
-        log.info("Sending starting game info to /topic/" + playerName + " with message " + isStarting);
-        simpMessagingTemplate.convertAndSend("/topic/" + playerName, new StartGameMessage(isStarting));
+    private void sendStartGameMessage(Room room) {
+        sendStartGameMessageToPlayer(room.getPlayer1().getName(), room);
+        sendStartGameMessageToPlayer(room.getPlayer2().getName(), room);
+    }
+
+    private void sendStartGameMessageToPlayer(String playerName, Room room) {
+        log.info("Sending starting game info to /topic/" + playerName);
+        simpMessagingTemplate.convertAndSend("/topic/" + playerName, RoomDTO.of(room));
     }
 
     public void deletePlayerFromRoom(String roomName, String playerName) {
