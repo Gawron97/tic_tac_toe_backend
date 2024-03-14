@@ -12,4 +12,9 @@ public class AppExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
     }
 
+    @ExceptionHandler(RoomIsEmpty.class)
+    public ResponseEntity<String> roomIsEmpty(RoomIsEmpty ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
 }

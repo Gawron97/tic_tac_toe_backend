@@ -6,6 +6,7 @@ import com.example.tic_tac_toe_backend.dto.StartGameMessage;
 import com.example.tic_tac_toe_backend.entity.Player;
 import com.example.tic_tac_toe_backend.entity.Room;
 import com.example.tic_tac_toe_backend.repository.RoomRepository;
+import com.example.tic_tac_toe_backend.utils.exception.RoomIsEmpty;
 import com.example.tic_tac_toe_backend.utils.exception.RoomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +76,9 @@ public class RoomService {
     public void deletePlayerFromRoom(String roomName, String playerName) {
 
         Room room = roomRepository.getRoomByName(roomName);
+        if(room.getFreeSlots() == 0) {
+            throw new RoomIsEmpty();
+        }
         if(room.getFreeSlots() == 1) {
             roomRepository.removeRoom(room);
         } else {

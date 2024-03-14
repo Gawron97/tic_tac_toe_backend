@@ -26,8 +26,8 @@ public class RoomDTO {
                 .dtype("Room")
                 .roomName(room.getRoomName())
                 .freeSlots(room.getFreeSlots())
-                .player1(PlayerDTO.of(room.getPlayer1()))
-                .player2(PlayerDTO.of(room.getPlayer2()))
+                .player1(room.getPlayer1() != null ? PlayerDTO.of(room.getPlayer1()) : null)
+                .player2(room.getPlayer2() != null ? PlayerDTO.of(room.getPlayer2()) : null)
                 .fields(room.getFields())
                 .build();
     }
