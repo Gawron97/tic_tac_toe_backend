@@ -6,10 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class StartGameMessage {
 
-    private static String dtype = "StartGameMessage";
+    private String dtype = "StartGameMessage";
     private Boolean isStarting;
+
+    public StartGameMessage(Boolean isStarting) {
+        this.isStarting = isStarting;
+    }
 
 }

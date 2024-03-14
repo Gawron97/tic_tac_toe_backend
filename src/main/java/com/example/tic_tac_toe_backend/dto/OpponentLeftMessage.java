@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class OpponentLeftMessage {
 
-    private static String dtype = "OpponentLeftMessage";
+    private String dtype = "OpponentLeftMessage";
     private String message = "Your opponent has left the game";
 
 }

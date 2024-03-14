@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class RoomDTO {
 
-    private static String dtype = "Room";
+    private String dtype = "Room";
     private String roomName;
     private int freeSlots;
     private String player1;
@@ -22,6 +22,7 @@ public class RoomDTO {
 
     public static RoomDTO of(Room room) {
         return RoomDTO.builder()
+                .dtype("Room")
                 .roomName(room.getRoomName())
                 .freeSlots(room.getFreeSlots())
                 .player1(room.getPlayer1())

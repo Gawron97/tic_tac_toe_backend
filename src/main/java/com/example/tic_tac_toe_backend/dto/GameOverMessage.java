@@ -6,11 +6,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class GameOverMessage {
 
-    private static String dtype = "GameOverMessage";
+    private String dtype = "GameOverMessage";
     private boolean isWinner;
     private boolean isDraw;
+
+    public GameOverMessage(boolean isWinner, boolean isDraw) {
+        this.isWinner = isWinner;
+        this.isDraw = isDraw;
+    }
 
 }
