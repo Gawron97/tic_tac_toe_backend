@@ -14,8 +14,8 @@ public class Room {
     private String roomName;
     private int freeSlots;
     private final int maxSlots = 2;
-    private String player1;
-    private String player2;
+    private Player player1;
+    private Player player2;
     private List<List<Integer>> fields;
 
     public Room(String roomName) {

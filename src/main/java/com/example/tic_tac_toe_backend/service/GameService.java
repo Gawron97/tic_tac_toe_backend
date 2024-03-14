@@ -28,10 +28,10 @@ public class GameService {
 
         BoardDTO board = new BoardDTO(room.getFields());
 
-        if(room.getPlayer1().equals(playerMove.getPlayerName())) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), board);
+        if(room.getPlayer1().getName().equals(playerMove.getPlayerName())) {
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), board);
         } else {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), board);
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), board);
         }
 
         if(checkWin(room)) {
@@ -47,7 +47,7 @@ public class GameService {
     private void makeMoveOnBoard(Room room, PlayerMove playerMove) {
         List<List<Integer>> fields = room.getFields();
         int symbol = 1;
-        if(room.getPlayer2().equals(playerMove.getPlayerName())) {
+        if(room.getPlayer2().getName().equals(playerMove.getPlayerName())) {
             symbol = 2;
         }
 
@@ -72,13 +72,13 @@ public class GameService {
         List<List<Integer>> fields = room.getFields();
         for(int i = 0; i < 3; i++) {
             if(fields.get(i).get(0) == 1 && fields.get(i).get(1) == 1 && fields.get(i).get(2) == 1) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(true, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(false, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
                 return true;
             }
             if(fields.get(i).get(0) == 2 && fields.get(i).get(1) == 2 && fields.get(i).get(2) == 2) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(false, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(true, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
                 return true;
             }
         }
@@ -89,13 +89,13 @@ public class GameService {
         List<List<Integer>> fields = room.getFields();
         for(int i = 0; i < 3; i++) {
             if(fields.get(0).get(i) == 1 && fields.get(1).get(i) == 1 && fields.get(2).get(i) == 1) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(true, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(false, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
                 return true;
             }
             if(fields.get(0).get(i) == 2 && fields.get(1).get(i) == 2 && fields.get(2).get(i) == 2) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(false, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(true, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
+                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
                 return true;
             }
         }
@@ -105,23 +105,23 @@ public class GameService {
     private boolean checkDiagonal(Room room) {
         List<List<Integer>> fields = room.getFields();
         if(fields.get(0).get(0) == 1 && fields.get(1).get(1) == 1 && fields.get(2).get(2) == 1) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(true, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(false, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
             return true;
         }
         if(fields.get(0).get(0) == 2 && fields.get(1).get(1) == 2 && fields.get(2).get(2) == 2) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(false, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(true, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
             return true;
         }
         if(fields.get(0).get(2) == 1 && fields.get(1).get(1) == 1 && fields.get(2).get(0) == 1) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(true, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(false, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
             return true;
         }
         if(fields.get(0).get(2) == 2 && fields.get(1).get(1) == 2 && fields.get(2).get(0) == 2) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(false, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(true, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
             return true;
         }
         return false;
@@ -138,8 +138,8 @@ public class GameService {
             }
         }
         if(countEmptyFields == 0) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), new GameOverMessage(false, true));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2(), new GameOverMessage(false, true));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, true));
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, true));
             return true;
         }
         return false;
