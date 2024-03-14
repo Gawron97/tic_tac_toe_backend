@@ -10,11 +10,13 @@ import lombok.Setter;
 @Builder
 public class PlayerDTO {
 
+    private String dtype = "Player";
     private String name;
     private boolean isStarting;
 
     public static PlayerDTO of(Player player) {
         return PlayerDTO.builder()
+                .dtype("Player")
                 .name(player.getName())
                 .isStarting(player.isStarting())
                 .build();
