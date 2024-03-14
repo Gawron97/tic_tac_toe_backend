@@ -146,11 +146,7 @@ public class GameService {
     }
 
     private void startNewGame(Room room) {
-        List<List<Integer>> fields = new ArrayList<>(3);
-        for(int i = 0; i < 3; i++) {
-            fields.add(new ArrayList<>(List.of(0, 0, 0)));
-        }
-        room.setFields(fields);
+        room.initializeFields();
     }
 
 

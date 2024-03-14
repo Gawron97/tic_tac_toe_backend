@@ -71,12 +71,11 @@ public class RoomService {
         } else {
             if(room.getPlayer1().equals(playerName)) {
                 room.setPlayer1(room.getPlayer2());
-                room.setPlayer2(null);
-                room.setFreeSlots(1);
-            } else {
-                room.setPlayer2(null);
-                room.setFreeSlots(1);
             }
+            room.setPlayer2(null);
+            room.setFreeSlots(1);
+            room.initializeFields();
+            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1(), RoomDTO.of(room));
         }
     }
 

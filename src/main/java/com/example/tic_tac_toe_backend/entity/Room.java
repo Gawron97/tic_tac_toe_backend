@@ -21,10 +21,13 @@ public class Room {
     public Room(String roomName) {
         this.roomName = roomName;
         this.freeSlots = maxSlots;
+        initializeFields();
+    }
+
+    public void initializeFields() {
         fields = new ArrayList<>(3);
         for(int i=0; i<3; i++) {
             fields.add(new ArrayList<>(List.of(0, 0, 0)));
         }
     }
-
 }
