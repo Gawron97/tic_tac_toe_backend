@@ -40,6 +40,7 @@ public class GameService {
         if(checkDraw(room)){
             return;
         }
+        startNewGame(room);
 
     }
 
@@ -48,16 +49,6 @@ public class GameService {
         int symbol = 1;
         if(room.getPlayer2().equals(playerMove.getPlayerName())) {
             symbol = 2;
-        }
-        if (fields == null) {
-            fields = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                List<Integer> row = new ArrayList<Integer>();
-                for (int j = 0; j < 3; j++) {
-                    row.add(null);
-                }
-                fields.add(row);
-            }
         }
 
         fields.get(playerMove.getX()).set(playerMove.getY(), symbol);
@@ -152,6 +143,14 @@ public class GameService {
             return true;
         }
         return false;
+    }
+
+    private void startNewGame(Room room) {
+        List<List<Integer>> fields = new ArrayList<>(3);
+        for(int i = 0; i < 3; i++) {
+            fields.add(new ArrayList<>(List.of(0, 0, 0)));
+        }
+        room.setFields(fields);
     }
 
 
