@@ -3,6 +3,7 @@ package com.example.tic_tac_toe_backend.service;
 import com.example.tic_tac_toe_backend.dto.BoardDTO;
 import com.example.tic_tac_toe_backend.dto.GameOverMessage;
 import com.example.tic_tac_toe_backend.dto.PlayerMove;
+import com.example.tic_tac_toe_backend.entity.Player;
 import com.example.tic_tac_toe_backend.entity.Room;
 import com.example.tic_tac_toe_backend.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,12 @@ public class GameService {
 
         fields.get(playerMove.getX()).set(playerMove.getY(), symbol);
         room.setFields(fields);
+
+        Player player1 = room.getPlayer1();
+        player1.setStarting(!player1.isStarting());
+
+        Player player2 = room.getPlayer2();
+        player2.setStarting(!player2.isStarting());
     }
 
     private boolean checkWin(Room room) {
