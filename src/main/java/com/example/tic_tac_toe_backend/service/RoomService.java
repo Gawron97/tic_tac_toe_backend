@@ -76,7 +76,7 @@ public class RoomService {
     public void deletePlayerFromRoom(String roomName, String playerName) {
 
         Room room = roomRepository.getRoomByName(roomName);
-        if(room.getFreeSlots() == 0) {
+        if(room.getFreeSlots() == 2) {
             throw new RoomIsEmpty();
         }
         if(room.getFreeSlots() == 1) {
