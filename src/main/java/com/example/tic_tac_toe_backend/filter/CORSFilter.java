@@ -28,7 +28,6 @@ public class CORSFilter implements Filter {
             } else {
                 chain.doFilter(request, response);
             }
-            log.info("Added CORS headers to response using CORSFilter");
         }
     }
 }

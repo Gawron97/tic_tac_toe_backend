@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>tic_tac_toe_backend</artifactId>
+    <artifactId>tic_tac_toe_backend_old</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>tic_tac_toe_backend</name>
     <description>tic_tac_toe_backend</description>

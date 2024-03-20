@@ -2,21 +2,16 @@ package com.example.tic_tac_toe_backend.service;
 
 import com.example.tic_tac_toe_backend.dto.OpponentLeftMessage;
 import com.example.tic_tac_toe_backend.dto.RoomDTO;
-import com.example.tic_tac_toe_backend.dto.StartGameMessage;
 import com.example.tic_tac_toe_backend.entity.Player;
 import com.example.tic_tac_toe_backend.entity.Room;
 import com.example.tic_tac_toe_backend.repository.RoomRepository;
-import com.example.tic_tac_toe_backend.utils.exception.RoomIsEmpty;
-import com.example.tic_tac_toe_backend.utils.exception.RoomNotFoundException;
+import com.example.tic_tac_toe_backend.utils.exception.UsernameTakenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -26,7 +21,17 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
+    private boolean isPlayerAlreadyInAnyRoom(String playerName) {
+        return roomRepository.getRooms().stream()
+                .anyMatch(room -> room.getPlayer1() != null && room.getPlayer1().getName().equals(playerName) ||
+                        room.getPlayer2() != null && room.getPlayer2().getName().equals(playerName));
+    }
+
     public RoomDTO chooseRoomForPlayer(String playerName) {
+        if (isPlayerAlreadyInAnyRoom(playerName)) {
+            throw new UsernameTakenException("Username " + playerName + " is already taken!");
+        }
+
 
         Room room;
         Optional<Room> optionalRoom = roomRepository.getRoomWithOneFreeSlot();
@@ -54,7 +59,6 @@ public class RoomService {
         newRoom.setFreeSlots(1);
         roomRepository.addRoom(newRoom);
         return RoomDTO.of(newRoom);
-
     }
 
     private void chooseStartingPlayer(Room room) {
@@ -76,9 +80,6 @@ public class RoomService {
     public void deletePlayerFromRoom(String roomName, String playerName) {
 
         Room room = roomRepository.getRoomByName(roomName);
-        if(room.getFreeSlots() == 2) {
-            throw new RoomIsEmpty();
-        }
         if(room.getFreeSlots() == 1) {
             roomRepository.removeRoom(room);
         } else {

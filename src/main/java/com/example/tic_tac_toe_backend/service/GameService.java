@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -63,29 +64,20 @@ public class GameService {
     }
 
     private boolean checkWin(Room room) {
-        if(checkRows(room)) {
-            return true;
-        }
-        if(checkColumns(room)) {
-            return true;
-        }
-        if(checkDiagonal(room)) {
-            return true;
-        }
-        return false;
+        return checkRows(room) || checkColumns(room) || checkDiagonal(room);
+    }
+
+    private void sendGameOverMessage(Room room, Integer winnerSymbol) {
+        GameOverMessage gameOverMessage = new GameOverMessage(winnerSymbol == 1, false);
+        simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), gameOverMessage);
+        gameOverMessage.setWinner(winnerSymbol == 2);
+        simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), gameOverMessage);
     }
 
     private boolean checkRows(Room room) {
-        List<List<Integer>> fields = room.getFields();
-        for(int i = 0; i < 3; i++) {
-            if(fields.get(i).get(0) == 1 && fields.get(i).get(1) == 1 && fields.get(i).get(2) == 1) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
-                return true;
-            }
-            if(fields.get(i).get(0) == 2 && fields.get(i).get(1) == 2 && fields.get(i).get(2) == 2) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
+        for (List<Integer> row : room.getFields()) {
+            if (row.stream().allMatch(cell -> cell.equals(row.get(0)) && cell != 0)) {
+                sendGameOverMessage(room, row.get(0));
                 return true;
             }
         }
@@ -94,45 +86,37 @@ public class GameService {
 
     private boolean checkColumns(Room room) {
         List<List<Integer>> fields = room.getFields();
-        for(int i = 0; i < 3; i++) {
-            if(fields.get(0).get(i) == 1 && fields.get(1).get(i) == 1 && fields.get(2).get(i) == 1) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
-                return true;
-            }
-            if(fields.get(0).get(i) == 2 && fields.get(1).get(i) == 2 && fields.get(2).get(i) == 2) {
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
-                simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
+        for (int columnIndex = 0; columnIndex < 3; columnIndex++) {
+            final int col = columnIndex;
+            if (IntStream.range(0, 3)
+                    .allMatch(rowIndex -> fields.get(rowIndex).get(col).equals(fields.get(0).get(col)) && fields.get(rowIndex).get(col) != 0)) {
+                sendGameOverMessage(room, fields.get(0).get(columnIndex));
                 return true;
             }
         }
         return false;
     }
 
+
     private boolean checkDiagonal(Room room) {
         List<List<Integer>> fields = room.getFields();
-        if(fields.get(0).get(0) == 1 && fields.get(1).get(1) == 1 && fields.get(2).get(2) == 1) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
+
+        // Pierwsza przekątna
+        boolean diagonal1 = IntStream.range(0, 3).allMatch(i -> fields.get(i).get(i).equals(fields.get(0).get(0)) && fields.get(i).get(i) != 0);
+        if (diagonal1) {
+            sendGameOverMessage(room, fields.get(0).get(0));
             return true;
         }
-        if(fields.get(0).get(0) == 2 && fields.get(1).get(1) == 2 && fields.get(2).get(2) == 2) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
-            return true;
-        }
-        if(fields.get(0).get(2) == 1 && fields.get(1).get(1) == 1 && fields.get(2).get(0) == 1) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(true, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, false));
-            return true;
-        }
-        if(fields.get(0).get(2) == 2 && fields.get(1).get(1) == 2 && fields.get(2).get(0) == 2) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, false));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(true, false));
+
+        // Druga przekątna
+        boolean diagonal2 = IntStream.range(0, 3).allMatch(i -> fields.get(i).get(2 - i).equals(fields.get(0).get(2)) && fields.get(i).get(2 - i) != 0);
+        if (diagonal2) {
+            sendGameOverMessage(room, fields.get(0).get(2));
             return true;
         }
         return false;
     }
+
 
     private boolean checkDraw(Room room) {
         int countEmptyFields = 0;
@@ -145,8 +129,7 @@ public class GameService {
             }
         }
         if(countEmptyFields == 0) {
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer1().getName(), new GameOverMessage(false, true));
-            simpMessagingTemplate.convertAndSend("/topic/" + room.getPlayer2().getName(), new GameOverMessage(false, true));
+            sendGameOverMessage(room, 0);
             return true;
         }
         return false;
