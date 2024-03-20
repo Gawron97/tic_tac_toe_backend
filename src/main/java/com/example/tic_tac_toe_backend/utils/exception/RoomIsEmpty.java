@@ -4,16 +4,16 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class RoomNotFoundException extends RuntimeException {
+public class RoomIsEmpty extends RuntimeException {
 
     private final HttpStatus status;
 
-    public RoomNotFoundException() {
-        super("Room not found");
+    public RoomIsEmpty() {
+        super("Room is empty");
         status = HttpStatus.NOT_FOUND;
     }
 
-    public RoomNotFoundException(String message) {
+    public RoomIsEmpty(String message) {
         super(message);
         status = HttpStatus.NOT_FOUND;
     }
