@@ -1,4 +1,4 @@
-package com.example.tic_tac_toe_backend.config;
+package com.example.tic_tac_toe_backend.utils.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

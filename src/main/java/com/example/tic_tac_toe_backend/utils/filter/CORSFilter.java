@@ -1,4 +1,4 @@
-package com.example.tic_tac_toe_backend.filter;
+package com.example.tic_tac_toe_backend.utils.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
