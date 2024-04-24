@@ -11,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 
+import static java.lang.Thread.sleep;
+
 @Configuration
 @EnableWebMvc
 @Slf4j
@@ -31,7 +33,7 @@ public class CORSFilter implements Filter {
             } else {
                 chain.doFilter(request, response);
             }
-            log.info("Added CORS headers to response using CORSFilter");
+            log.info("Added CORS headers to response using CORSFilter to request " + request.getRequestURI());
         }
     }
 }
